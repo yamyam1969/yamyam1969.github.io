@@ -4,34 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D AR Room</title>
-    <!-- 【超重要】Safariで最も安定して動くバージョン3.5.0に指定しています -->
-    <script type="module" src="https://googleapis.com"></script>
+    
+    <!-- 対策1: 読み込み元をGoogle公式(ajax)から、より確実なunpkg(最新安定版3.5.0)に変更 -->
+    <script type="module" src="https://unpkg.com"></script>
+    
+    <style>
+        body { margin: 0; padding: 0; background-color: #222; color: white; font-family: sans-serif; }
+        #container { width: 100vw; height: 100vh; position: relative; }
+        /* エラーが起きた場合に画面に出すメッセージ用のスタイル */
+        #error-log { position: absolute; top: 150px; left: 16px; color: #ff4d4d; font-size: 14px; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 5px; display: none; z-index: 999; }
+    </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh;">
+<body>
 
-    <!-- 3Dモデルの表示（Safariのバグを回避する属性順に並べています） -->
-    <model-viewer 
-      src="model.glb" 
-      ios-src="model.usdz"
-      alt="3Dモデル" 
-      camera-controls 
-      auto-rotate 
-      ar 
-      ar-modes="quick-look webxr scene-viewer"
-      ar-scale="auto"
-      style="width: 100vw; height: 100vh;">
-      
-      <!-- 画面右上に固定表示するQRコード -->
-      <div style="position: absolute; top: 16px; right: 16px; background: white; padding: 8px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
-          <img src="qr.png" alt="このページのQRコード" style="width: 100px; height: 100px; display: block;">
-          <span style="font-size: 10px; color: #666; font-family: sans-serif;">スマホでAR表示</span>
-      </div>
+    <div id="container">
+        <!-- エラーログ出力エリア -->
+        <div id="error-log"></div>
 
-      <!-- AR起動用ボタン（iPhoneのSafariでも反応しやすいデザイン） -->
-      <button slot="ar-button" style="background-color: #007bff; color: white; border-radius: 20px; border: none; position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer;">
-        📷 部屋に置く (AR起動)
-      </button>
-    </model-viewer>
+        <!-- 対策2: 本体を表示。エラー検知用の id="viewer" を追加 -->
+        <model-viewer 
+          id="viewer"
+          src="model.glb" 
+          ios-src="model.usdz"
+          alt="3Dモデル" 
+          camera-controls 
+          auto-rotate 
+          ar 
+          ar-modes="quick-look webxr scene-viewer"
+          ar-scale="auto"
+          style="width: 100%; height: 100%;">
+          
+          <!-- 画面右上に固定表示するQRコード -->
+          <div style="position: absolute; top: 16px; right: 16px; background: white; padding: 8px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: center; z-index: 10;">
+              <img src="qr.png" alt="このページのQRコード" style="width: 100px; height: 100px; display: block;">
+              <span style="font-size: 10px; color: #666;">スマホでAR表示</span>
+          </div>
+
+          <!-- AR起動用ボタン -->
+          <button slot="ar-button" style="background-color: #007bff; color: white; border-radius: 20px; border: none; position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); cursor: pointer; z-index: 10;">
+            📷 部屋に置く (AR起動)
+          </button>
+        </model-viewer>
+    </div>
+
+    <!-- 対策3: 読み込みエラーが発生した場合に、何が原因かを画面に強制表示するプログラム -->
+    <script>
+        const viewer = document.getElementById('viewer');
+        const errorLog = document.getElementById('error-log');
+        
+        viewer.addEventListener('error', (event) => {
+            errorLog.style.display = 'block';
+            errorLog.innerHTML = '【エラー発生】3Dファイルの読み込みに失敗しました。<br>詳細: ' + event.detail.type;
+            console.error(event);
+        });
+    </script>
 
 </body>
 </html>
