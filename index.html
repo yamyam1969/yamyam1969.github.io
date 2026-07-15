@@ -9,7 +9,7 @@ html<!DOCTYPE html>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh;">
 
-    <!-- 3Dモデルの表示（ファイル名は後でアップロードするものに合わせる） -->
+    <!-- 3Dモデルの表示 -->
     <model-viewer 
       src="model.glb" 
       ios-src="model.usdz"
@@ -20,6 +20,13 @@ html<!DOCTYPE html>
       ar-modes="webxr scene-viewer quick-look"
       style="width: 100vw; height: 100vh;">
       
+      <!-- 画面右上に固定表示するQRコード（ここを追加） -->
+      <div style="position: absolute; top: 16px; right: 16px; background: white; padding: 8px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+          <img src="qr.png" alt="このページのQRコード" style="width: 100px; height: 100px; display: block;">
+          <span style="font-size: 10px; color: #666; font-family: sans-serif;">スマホでAR表示</span>
+      </div>
+
+      <!-- AR起動用ボタン -->
       <button slot="ar-button" style="background-color: #007bff; color: white; border-radius: 20px; border: none; position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer;">
         📷 部屋に置く (AR起動)
       </button>
