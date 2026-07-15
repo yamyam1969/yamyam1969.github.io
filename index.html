@@ -1,0 +1,29 @@
+html<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D AR Room</title>
+    <!-- model-viewerの読み込み -->
+    <script type="module" src="https://googleapis.com"></script>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh;">
+
+    <!-- 3Dモデルの表示（ファイル名は後でアップロードするものに合わせる） -->
+    <model-viewer 
+      src="model.glb" 
+      ios-src="model.usdz"
+      alt="3Dモデル" 
+      camera-controls 
+      auto-rotate 
+      ar 
+      ar-modes="webxr scene-viewer quick-look"
+      style="width: 100vw; height: 100vh;">
+      
+      <button slot="ar-button" style="background-color: #007bff; color: white; border-radius: 20px; border: none; position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer;">
+        📷 部屋に置く (AR起動)
+      </button>
+    </model-viewer>
+
+</body>
+</html>
